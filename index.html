@@ -1,9 +1,8 @@
-html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>STAR RUSH — Cosmic Catch</title>
 
 <style>
@@ -11,292 +10,511 @@ html
   box-sizing:border-box;
   margin:0;
   padding:0;
-  user-select:none;
-  -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
 }
 
 body{
   min-height:100vh;
-  font-family:Arial,Helvetica,sans-serif;
   background:
-    radial-gradient(circle at 20% 20%,#182b5c 0%,transparent 30%),
-    radial-gradient(circle at 80% 80%,#34145c 0%,transparent 30%),
-    #050713;
-  color:white;
-  overflow:hidden;
+    radial-gradient(circle at 20% 20%,#263578 0%,transparent 35%),
+    radial-gradient(circle at 80% 80%,#5b216f 0%,transparent 35%),
+    #070916;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden;
 }
 
-button,input{
-  font:inherit;
+button{
+  border:0;
+  cursor:pointer;
+  color:#fff;
+  font-weight:800;
 }
 
-.screen{
+.app{
   width:100%;
-  height:100vh;
-  display:none;
-  align-items:center;
-  justify-content:center;
+  max-width:1100px;
+  min-height:100vh;
+  margin:auto;
+  padding:15px;
 }
 
-.screen.active{
+/* HEADER */
+
+header{
   display:flex;
-}
-
-.card{
-  width:min(92%,520px);
-  padding:32px;
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:25px;
-  background:rgba(15,20,45,.82);
-  backdrop-filter:blur(15px);
-  box-shadow:0 20px 60px rgba(0,0,0,.45);
-  text-align:center;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 18px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(10,13,35,.78);
+  backdrop-filter:blur(18px);
+  border-radius:22px;
+  box-shadow:0 15px 50px rgba(0,0,0,.3);
 }
 
 .logo{
-  font-size:clamp(38px,8vw,65px);
-  font-weight:900;
-  letter-spacing:3px;
-  background:linear-gradient(90deg,#6cf6ff,#b66cff,#fff);
-  -webkit-background-clip:text;
-  color:transparent;
-  margin-bottom:8px;
+  font-size:24px;
+  font-weight:1000;
+  letter-spacing:1px;
 }
 
-.subtitle{
-  color:#aeb9d7;
-  margin-bottom:25px;
+.logo span{
+  color:#ffd84d;
 }
 
-.owner{
-  color:#6cf6ff;
-  font-weight:bold;
-  margin-bottom:20px;
-}
-
-input{
-  width:100%;
-  padding:15px 18px;
-  border-radius:14px;
-  border:1px solid #38466f;
-  background:#090e22;
-  color:white;
-  outline:none;
-  margin-bottom:14px;
-}
-
-input:focus{
-  border-color:#6cf6ff;
-  box-shadow:0 0 18px rgba(108,246,255,.2);
-}
-
-.btn{
-  width:100%;
-  border:0;
-  padding:15px;
-  border-radius:15px;
-  cursor:pointer;
-  font-weight:800;
-  color:white;
-  background:linear-gradient(90deg,#197cff,#9b3dff);
-  box-shadow:0 8px 25px rgba(100,80,255,.3);
-  transition:.2s;
-  margin-top:8px;
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-}
-
-.small{
-  color:#8f9bbd;
-  font-size:13px;
-  margin-top:15px;
-}
-
-#gameScreen{
-  position:relative;
-  width:100%;
-  height:100vh;
-}
-
-canvas{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-}
-
-.topbar{
-  position:absolute;
-  z-index:5;
-  top:12px;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(96%,900px);
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:8px;
-}
-
-.hud{
-  padding:10px 12px;
-  border-radius:14px;
-  background:rgba(5,9,25,.72);
-  border:1px solid rgba(255,255,255,.12);
-  backdrop-filter:blur(10px);
-  text-align:center;
-}
-
-.hud b{
-  display:block;
-  color:#6cf6ff;
+.people{
   font-size:12px;
-  margin-bottom:3px;
+  color:#aeb8df;
+  margin-top:4px;
 }
 
-.hud span{
-  font-weight:900;
-}
-
-.playerHud{
-  grid-column:1/-1;
+.people b{
   color:#fff;
 }
 
-.playerHud span{
-  color:#c58cff;
-}
-
-.levelInfo{
-  position:absolute;
-  z-index:5;
-  top:112px;
-  left:50%;
-  transform:translateX(-50%);
-  text-align:center;
-  padding:8px 18px;
-  border-radius:20px;
-  background:rgba(5,9,25,.65);
-  border:1px solid rgba(255,255,255,.1);
-}
-
-.levelInfo strong{
-  color:#ffd75e;
-}
-
-.controls{
-  position:absolute;
-  z-index:6;
-  bottom:18px;
-  left:50%;
-  transform:translateX(-50%);
+.headerStats{
   display:flex;
-  gap:15px;
+  gap:8px;
 }
 
-.controlBtn{
-  width:75px;
-  height:60px;
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:18px;
-  background:rgba(10,15,35,.75);
-  color:white;
-  font-size:28px;
-  cursor:pointer;
+.stat{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:13px;
+  padding:8px 12px;
+  font-size:13px;
+}
+
+/* HOME */
+
+.home{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:20px;
+  margin-top:20px;
+}
+
+.hero{
+  min-height:470px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+  padding:42px;
+  border-radius:30px;
+  background:
+    linear-gradient(135deg,rgba(20,27,67,.92),rgba(20,8,40,.86));
+  border:1px solid rgba(255,255,255,.12);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:before{
+  content:"★";
+  position:absolute;
+  right:20px;
+  top:0;
+  font-size:190px;
+  color:rgba(255,215,70,.05);
+}
+
+.hero h1{
+  position:relative;
+  font-size:clamp(42px,7vw,78px);
+  line-height:.9;
+  margin-bottom:18px;
+}
+
+.hero h1 span{
+  color:#ffd84d;
+  text-shadow:0 0 25px rgba(255,216,77,.4);
+}
+
+.hero p{
+  position:relative;
+  max-width:580px;
+  color:#aeb8df;
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+/* NAME BOX */
+
+.nameBox{
+  position:relative;
+  width:100%;
+  max-width:440px;
+  margin-bottom:18px;
+}
+
+.nameBox label{
+  display:block;
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+.nameBox input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.15);
+  outline:none;
+  background:rgba(255,255,255,.07);
+  color:#fff;
+  font-size:16px;
+}
+
+.nameBox input:focus{
+  border-color:#ffd84d;
+  box-shadow:0 0 20px rgba(255,216,77,.1);
+}
+
+.nameError{
+  display:block;
+  min-height:17px;
+  color:#ff7070;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.buttons{
+  position:relative;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.primary{
+  padding:15px 25px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#ffda45,#ff9d28);
+  color:#17120a;
+  box-shadow:0 10px 30px rgba(255,180,40,.25);
+  transition:.2s;
+}
+
+.primary:hover{
+  transform:translateY(-2px);
+}
+
+.secondary{
+  padding:15px 25px;
+  border-radius:15px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.side{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.card{
+  background:rgba(10,13,35,.72);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:24px;
+  padding:23px;
+}
+
+.card h2{
+  margin-bottom:12px;
+}
+
+.card p{
+  color:#929cc5;
+}
+
+.bigNumber{
+  font-size:42px;
+  font-weight:1000;
+  color:#ffd84d;
+}
+
+.progressBox{
+  margin-top:12px;
+}
+
+.progress{
+  height:11px;
+  background:rgba(255,255,255,.08);
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress div{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#ffd84d,#ff8d35);
+  border-radius:20px;
+  transition:.4s;
+}
+
+.progressText{
+  display:block;
+  color:#929cc5;
+  margin-top:6px;
+  font-size:12px;
+}
+
+/* GAME */
+
+.gameScreen{
+  display:none;
+  margin-top:18px;
+}
+
+.gameTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+
+.hud{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.hudBox{
+  min-width:78px;
+  text-align:center;
+  padding:9px 11px;
+  background:rgba(10,13,35,.82);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;
+}
+
+.hudBox small{
+  display:block;
+  color:#929cc5;
+  font-size:9px;
+  margin-bottom:3px;
+}
+
+.hudBox b{
+  font-size:16px;
+}
+
+#gameCanvas{
+  width:100%;
+  height:min(68vh,650px);
+  min-height:420px;
+  display:block;
+  background:#050711;
+  border-radius:25px;
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
   touch-action:none;
 }
 
-.controlBtn:active{
-  transform:scale(.94);
-  background:rgba(70,90,180,.8);
+.gameControls{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:12px;
 }
 
-.homeBtn{
-  position:absolute;
-  z-index:10;
-  top:12px;
-  right:12px;
-  border:1px solid rgba(255,255,255,.15);
-  background:rgba(10,15,35,.75);
-  color:white;
-  padding:9px 14px;
-  border-radius:12px;
+.controlBtn{
+  padding:12px 21px;
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
+}
+
+/* LEVELS */
+
+.levelScreen{
+  display:none;
+  margin-top:20px;
+}
+
+.levelHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.levelGrid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:11px;
+}
+
+.level{
+  min-height:88px;
+  border-radius:18px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+}
+
+.level.unlocked{
   cursor:pointer;
 }
 
+.level.unlocked:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.1);
+}
+
+.level.locked{
+  opacity:.35;
+}
+
+.level.current{
+  border-color:#ffd84d;
+}
+
+.levelNum{
+  font-size:20px;
+  font-weight:1000;
+}
+
+.stars{
+  color:#ffd84d;
+  letter-spacing:2px;
+  font-size:12px;
+}
+
+/* MODAL */
+
 .modal{
-  position:absolute;
-  z-index:20;
-  inset:0;
   display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(0,0,0,.74);
+  backdrop-filter:blur(8px);
   align-items:center;
   justify-content:center;
-  background:rgba(0,0,0,.62);
-  backdrop-filter:blur(7px);
+  padding:18px;
 }
 
-.modal.show{
-  display:flex;
-}
-
-.result{
-  width:min(90%,420px);
+.modalBox{
+  width:min(430px,100%);
+  background:#10142d;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:28px;
   padding:30px;
-  border-radius:25px;
-  background:#0c1129;
-  border:1px solid rgba(255,255,255,.15);
   text-align:center;
+  box-shadow:0 30px 100px rgba(0,0,0,.5);
 }
 
-.result h2{
-  font-size:32px;
-  margin-bottom:10px;
+.modalBox h2{
+  font-size:30px;
+  margin-bottom:8px;
 }
 
-.result p{
-  color:#b4bedb;
-  line-height:1.7;
+.modalBox p{
+  color:#aeb8df;
+  line-height:1.6;
+  margin:10px 0 18px;
 }
 
-.result .btn{
-  margin-top:15px;
+.resultStars{
+  font-size:34px;
+  color:#ffd84d;
+  margin:13px;
 }
 
-.hidden{
-  display:none!important;
+.modalButtons{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-@media(max-width:600px){
-  .card{
-    padding:25px 20px;
+/* MOBILE */
+
+@media(max-width:750px){
+
+  .app{
+    padding:9px;
   }
 
-  .topbar{
+  header{
+    border-radius:17px;
+    padding:11px;
+  }
+
+  .logo{
+    font-size:19px;
+  }
+
+  .people{
+    font-size:10px;
+  }
+
+  .headerStats .stat:nth-child(2){
+    display:none;
+  }
+
+  .home{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    min-height:480px;
+    padding:27px;
+    border-radius:24px;
+  }
+
+  .hero h1{
+    font-size:51px;
+  }
+
+  .side{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .card{
+    padding:17px;
+    border-radius:19px;
+  }
+
+  #gameCanvas{
+    min-height:500px;
+    height:65vh;
+    border-radius:19px;
+  }
+
+  .levelGrid{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .level{
+    min-height:74px;
+  }
+}
+
+@media(max-width:430px){
+
+  .side{
+    grid-template-columns:1fr;
+  }
+
+  .levelGrid{
     grid-template-columns:repeat(3,1fr);
   }
 
-  .hud{
-    padding:8px 5px;
-    font-size:12px;
+  #gameCanvas{
+    min-height:460px;
   }
 
-  .playerHud{
-    font-size:13px;
-  }
-
-  .levelInfo{
-    top:105px;
-    font-size:13px;
-  }
-
-  .controls{
-    bottom:12px;
-  }
-
-  .controlBtn{
-    width:68px;
-    height:56px;
+  .hudBox{
+    min-width:70px;
   }
 }
 </style>
@@ -304,146 +522,325 @@ canvas{
 
 <body>
 
-<!-- HOME -->
-<section id="homeScreen" class="screen active">
-  <div class="card">
-    <div class="logo">STAR RUSH</div>
-    <div class="subtitle">COSMIC CATCH</div>
+<div class="app">
 
-    <div class="owner">👑 Owner: Shahenshah</div>
+<header>
 
-    <input
-      id="playerName"
-      type="text"
-      maxlength="18"
-      placeholder="Enter your player name"
-      autocomplete="off"
-    >
+  <div>
+    <div class="logo">⭐ STAR <span>RUSH</span></div>
 
-    <button class="btn" onclick="startGame()">
-      🚀 START GAME
-    </button>
-
-    <div class="small">
-      ⭐ Catch stars • 💣 Avoid bombs • ⏱️ Survive until time ends
+    <div class="people">
+      Owner: <b id="ownerName">Shahenshah</b>
+      &nbsp; | &nbsp;
+      Player: <b id="playerNameTop">Guest</b>
     </div>
   </div>
+
+  <div class="headerStats">
+    <div class="stat">⭐ <span id="headerStars">0</span></div>
+    <div class="stat">🏆 <span id="headerScore">0</span></div>
+  </div>
+
+</header>
+
+
+<!-- HOME -->
+
+<section class="home" id="home">
+
+  <div class="hero">
+
+    <h1>
+      CATCH<br>
+      <span>THE STARS</span>
+    </h1>
+
+    <p>
+      Move your spaceship, collect golden stars and
+      complete every level. Avoid bombs and beat your
+      best score!
+    </p>
+
+    <div class="nameBox">
+
+      <label>👤 Enter Your Name</label>
+
+      <input
+        id="playerNameInput"
+        type="text"
+        maxlength="18"
+        placeholder="Write your name..."
+        autocomplete="off"
+      >
+
+      <small id="nameError" class="nameError"></small>
+
+    </div>
+
+    <div class="buttons">
+
+      <button
+        class="primary"
+        onclick="continueGame()"
+      >
+        ▶ CONTINUE
+      </button>
+
+      <button
+        class="secondary"
+        onclick="showLevels()"
+      >
+        ☰ LEVELS
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="side">
+
+    <div class="card">
+
+      <h2>🚀 Progress</h2>
+
+      <div class="bigNumber">
+        <span id="currentLevelDisplay">1</span>
+      </div>
+
+      <p>Current Level</p>
+
+      <div class="progressBox">
+
+        <div class="progress">
+          <div id="progressBar"></div>
+        </div>
+
+        <span
+          class="progressText"
+          id="progressText"
+        >
+          Level 1 of 30
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>🏆 Best Score</h2>
+
+      <div
+        class="bigNumber"
+        id="bestScore"
+      >
+        0
+      </div>
+
+      <p>All-time best</p>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>💾 Auto Save</h2>
+
+      <p style="line-height:1.6">
+        Your player name, level, stars and score
+        are automatically saved on this browser.
+      </p>
+
+    </div>
+
+  </div>
+
 </section>
 
+
 <!-- GAME -->
-<section id="gameScreen" class="screen">
+
+<section
+  class="gameScreen"
+  id="gameScreen"
+>
+
+  <div class="gameTop">
+
+    <button
+      class="secondary"
+      onclick="goHome()"
+    >
+      ← HOME
+    </button>
+
+    <div class="hud">
+
+      <div class="hudBox">
+        <small>PLAYER</small>
+        <b id="hudPlayer">Guest</b>
+      </div>
+
+      <div class="hudBox">
+        <small>LEVEL</small>
+        <b id="hudLevel">1</b>
+      </div>
+
+      <div class="hudBox">
+        <small>SCORE</small>
+        <b id="hudScore">0</b>
+      </div>
+
+      <div class="hudBox">
+        <small>STARS</small>
+        <b id="hudStars">0/10</b>
+      </div>
+
+      <div class="hudBox">
+        <small>TIME</small>
+        <b id="hudTime">30</b>
+      </div>
+
+    </div>
+
+  </div>
+
 
   <canvas id="gameCanvas"></canvas>
 
-  <div class="topbar">
 
-    <div class="hud playerHud">
-      👤 PLAYER:
-      <span id="hudPlayer">---</span>
-    </div>
+  <div class="gameControls">
 
-    <div class="hud">
-      <b>LEVEL</b>
-      <span id="hudLevel">1</span>
-    </div>
+    <button
+      class="controlBtn"
+      onclick="moveLeft()"
+    >
+      ◀ LEFT
+    </button>
 
-    <div class="hud">
-      <b>STARS</b>
-      <span id="hudStars">0/5</span>
-    </div>
+    <button
+      class="controlBtn"
+      onclick="pauseGame()"
+      id="pauseBtn"
+    >
+      Ⅱ PAUSE
+    </button>
 
-    <div class="hud">
-      <b>TIME</b>
-      <span id="hudTime">40</span>
-    </div>
+    <button
+      class="controlBtn"
+      onclick="moveRight()"
+    >
+      RIGHT ▶
+    </button>
 
-  </div>
-
-  <div class="levelInfo">
-    🎯 Target: <strong id="targetText">5 Stars</strong>
-  </div>
-
-  <button class="homeBtn" onclick="goHome()">⌂ Home</button>
-
-  <div class="controls">
-    <button class="controlBtn" id="leftBtn">◀</button>
-    <button class="controlBtn" id="rightBtn">▶</button>
-  </div>
-
-  <div class="modal" id="resultModal">
-    <div class="result">
-
-      <h2 id="resultTitle">LEVEL COMPLETE!</h2>
-
-      <p id="resultText"></p>
-
-      <button
-        id="nextBtn"
-        class="btn"
-        onclick="nextLevel()">
-        NEXT LEVEL 🚀
-      </button>
-
-      <button
-        id="retryBtn"
-        class="btn"
-        onclick="retryLevel()">
-        RETRY 🔄
-      </button>
-
-      <button
-        class="btn"
-        onclick="goHome()">
-        HOME 🏠
-      </button>
-
-    </div>
   </div>
 
 </section>
 
+
+<!-- LEVELS -->
+
+<section
+  class="levelScreen"
+  id="levelScreen"
+>
+
+  <div class="levelHeader">
+
+    <h2>⭐ LEVELS</h2>
+
+    <button
+      class="secondary"
+      onclick="goHome()"
+    >
+      ← HOME
+    </button>
+
+  </div>
+
+  <div
+    class="levelGrid"
+    id="levelGrid"
+  ></div>
+
+</section>
+
+</div>
+
+
+<!-- RESULT MODAL -->
+
+<div
+  class="modal"
+  id="resultModal"
+>
+
+  <div class="modalBox">
+
+    <h2 id="resultTitle">
+      LEVEL COMPLETE!
+    </h2>
+
+    <p id="resultMessage">
+      Great job!
+    </p>
+
+    <div
+      class="resultStars"
+      id="resultStars"
+    >
+      ★★★
+    </div>
+
+    <div class="modalButtons">
+
+      <button
+        class="primary"
+        id="nextButton"
+        onclick="nextLevel()"
+      >
+        NEXT LEVEL →
+      </button>
+
+      <button
+        class="secondary"
+        onclick="retryCurrentLevel()"
+      >
+        ↻ RETRY
+      </button>
+
+      <button
+        class="secondary"
+        onclick="goHome()"
+      >
+        HOME
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
+
 /* =========================================================
-   STAR RUSH — COSMIC CATCH
-   OWNER: SHAHENSHAH
-   ========================================================= */
+   STAR RUSH
+========================================================= */
 
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const OWNER_NAME = "Shahenshah";
 
-let W = 0;
-let H = 0;
+const TOTAL_LEVELS = 30;
 
-let playing = false;
-let paused = false;
 
-let currentLevel = 1;
-let collected = 0;
-let targetStars = 5;
-let timeLeft = 40;
+/* SAVE DATA */
 
-let score = 0;
-let bestScore = 0;
-let totalStars = 0;
-
-let objects = [];
-let particles = [];
-let starsBackground = [];
-
-let timerId = null;
-let animationId = null;
-
-let leftPressed = false;
-let rightPressed = false;
-
-let playerName = "";
-
-const SAVE_KEY = "starRushSave";
-const NAME_KEY = "starRushPlayerName";
-
-/* ---------- SAVE ---------- */
-
-let save = {
+let save = JSON.parse(
+  localStorage.getItem("starRushSave")
+) || {
   currentLevel:1,
   unlockedLevel:1,
   score:0,
@@ -452,138 +849,781 @@ let save = {
   levelStars:{}
 };
 
-function loadGame(){
 
-  try{
+/* PLAYER NAME */
 
-    const saved = JSON.parse(
-      localStorage.getItem(SAVE_KEY)
-    );
+let playerName =
+  localStorage.getItem("starRushPlayerName") || "";
 
-    if(saved){
-      save = {
-        ...save,
-        ...saved
-      };
-    }
 
-  }catch(e){
-    console.log("Save load error",e);
-  }
+/* GAME VARIABLES */
 
-  playerName =
-    localStorage.getItem(NAME_KEY) || "";
+let currentLevel = save.currentLevel;
 
-  if(playerName){
-    document.getElementById("playerName").value =
-      playerName;
-  }
+let levelScore = 0;
+let collected = 0;
+let targetStars = 10;
 
-  currentLevel =
-    Math.max(1, Math.min(30, save.currentLevel || 1));
+let timeLeft = 30;
 
-  score = save.score || 0;
-  bestScore = save.bestScore || 0;
-  totalStars = save.totalStars || 0;
-}
+let objects = [];
+
+let playing = false;
+let paused = false;
+
+let animationId = null;
+let timerId = null;
+
+let W = 0;
+let H = 0;
+
+let keys = {
+  left:false,
+  right:false
+};
+
+let player = {
+  x:0,
+  y:0,
+  width:80,
+  height:24,
+  speed:8
+};
+
+
+/* DOM */
+
+const home =
+  document.getElementById("home");
+
+const gameScreen =
+  document.getElementById("gameScreen");
+
+const levelScreen =
+  document.getElementById("levelScreen");
+
+const canvas =
+  document.getElementById("gameCanvas");
+
+const ctx =
+  canvas.getContext("2d");
+
+
+/* INITIAL */
+
+document.getElementById("ownerName")
+  .textContent = OWNER_NAME;
+
+document.getElementById("playerNameInput")
+  .value = playerName;
+
+document.getElementById("playerNameTop")
+  .textContent =
+  playerName || "Guest";
+
+updateHome();
+
+renderLevels();
+
+
+/* =========================================================
+   SAVE
+========================================================= */
 
 function saveGame(){
 
-  save.currentLevel = currentLevel;
-  save.score = score;
-  save.bestScore = bestScore;
-  save.totalStars = totalStars;
+  save.currentLevel =
+    currentLevel;
 
   localStorage.setItem(
-    SAVE_KEY,
+    "starRushSave",
     JSON.stringify(save)
   );
 
-  localStorage.setItem(
-    NAME_KEY,
-    playerName
-  );
+  if(playerName){
+
+    localStorage.setItem(
+      "starRushPlayerName",
+      playerName
+    );
+  }
+
+  updateHome();
 }
 
-/* ---------- CANVAS ---------- */
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function updateHome(){
+
+  document.getElementById("headerStars")
+    .textContent =
+    save.totalStars;
+
+  document.getElementById("headerScore")
+    .textContent =
+    save.score;
+
+  document.getElementById("bestScore")
+    .textContent =
+    save.bestScore;
+
+  document.getElementById("currentLevelDisplay")
+    .textContent =
+    save.currentLevel;
+
+  document.getElementById("progressText")
+    .textContent =
+    `Level ${save.currentLevel} of ${TOTAL_LEVELS}`;
+
+  document.getElementById("progressBar")
+    .style.width =
+    Math.min(
+      100,
+      ((save.currentLevel-1) /
+      TOTAL_LEVELS) * 100
+    ) + "%";
+}
+
+
+/* =========================================================
+   PLAYER NAME
+========================================================= */
+
+function getPlayerName(){
+
+  const input =
+    document.getElementById(
+      "playerNameInput"
+    );
+
+  const name =
+    input.value.trim();
+
+  if(!name){
+
+    document.getElementById(
+      "nameError"
+    ).textContent =
+      "⚠️ Please enter your name first.";
+
+    input.focus();
+
+    return false;
+  }
+
+  playerName =
+    name.substring(0,18);
+
+  localStorage.setItem(
+    "starRushPlayerName",
+    playerName
+  );
+
+  document.getElementById(
+    "playerNameTop"
+  ).textContent =
+    playerName;
+
+  document.getElementById(
+    "nameError"
+  ).textContent = "";
+
+  return true;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function continueGame(){
+
+  if(!getPlayerName()){
+    return;
+  }
+
+  currentLevel =
+    Math.max(
+      1,
+      Math.min(
+        save.currentLevel,
+        TOTAL_LEVELS
+      )
+    );
+
+  startLevel(currentLevel);
+}
+
+
+function showLevels(){
+
+  home.style.display = "none";
+  gameScreen.style.display = "none";
+  levelScreen.style.display = "block";
+
+  renderLevels();
+}
+
+
+function goHome(){
+
+  /*
+    Save current level before leaving.
+  */
+
+  if(playing){
+
+    save.currentLevel =
+      currentLevel;
+
+    saveGame();
+  }
+
+  stopGame();
+
+  closeModal();
+
+  gameScreen.style.display = "none";
+  levelScreen.style.display = "none";
+  home.style.display = "grid";
+
+  updateHome();
+}
+
+
+/* =========================================================
+   LEVELS
+========================================================= */
+
+function renderLevels(){
+
+  const grid =
+    document.getElementById(
+      "levelGrid"
+    );
+
+  grid.innerHTML = "";
+
+  for(let i=1;i<=TOTAL_LEVELS;i++){
+
+    const div =
+      document.createElement("div");
+
+    const unlocked =
+      i <= save.unlockedLevel;
+
+    const stars =
+      save.levelStars[i] || 0;
+
+    div.className =
+      "level " +
+      (unlocked ? "unlocked" : "locked") +
+      (i === save.currentLevel
+        ? " current"
+        : "");
+
+    div.innerHTML = `
+      <div class="levelNum">
+        ${unlocked ? i : "🔒"}
+      </div>
+
+      <div class="stars">
+        ${"★".repeat(stars)}
+        ${"☆".repeat(3-stars)}
+      </div>
+    `;
+
+    if(unlocked){
+
+      div.onclick =
+        () => {
+
+          if(!getPlayerName()){
+            return;
+          }
+
+          startLevel(i);
+        };
+    }
+
+    grid.appendChild(div);
+  }
+}
+
+
+/* =========================================================
+   START LEVEL
+========================================================= */
+
+function startLevel(level){
+
+  if(!playerName){
+
+    if(!getPlayerName()){
+      return;
+    }
+  }
+
+  stopGame();
+
+  closeModal();
+
+  currentLevel = level;
+
+  levelScore = 0;
+  collected = 0;
+
+  targetStars =
+    Math.min(
+      10 + Math.floor((level-1)/5),
+      15
+    );
+
+  /*
+    Minimum 35 seconds.
+  */
+
+  timeLeft =
+    35 + Math.floor(level / 4);
+
+  objects = [];
+
+  playing = true;
+  paused = false;
+
+  home.style.display = "none";
+  levelScreen.style.display = "none";
+  gameScreen.style.display = "block";
+
+  document.getElementById("hudPlayer")
+    .textContent =
+    playerName;
+
+  document.getElementById("hudLevel")
+    .textContent =
+    level;
+
+  document.getElementById("hudScore")
+    .textContent =
+    "0";
+
+  document.getElementById("hudStars")
+    .textContent =
+    `0/${targetStars}`;
+
+  document.getElementById("hudTime")
+    .textContent =
+    timeLeft;
+
+  document.getElementById("pauseBtn")
+    .textContent =
+    "Ⅱ PAUSE";
+
+  resizeCanvas();
+
+  player.x =
+    W/2 - player.width/2;
+
+  player.y =
+    H - 65;
+
+  createObjects();
+
+
+  /*
+    ========================================================
+    IMPORTANT TIMER FIX
+    ========================================================
+
+    Timer is now the ONLY way a successful level
+    can finish.
+
+    Even if:
+      collected >= targetStars
+
+    the game DOES NOT finish here.
+
+    The player can continue collecting stars
+    until the timer reaches 0.
+  */
+
+  clearInterval(timerId);
+
+  timerId =
+    setInterval(() => {
+
+      if(!playing || paused){
+        return;
+      }
+
+      if(timeLeft <= 0){
+        return;
+      }
+
+      timeLeft--;
+
+      document.getElementById("hudTime")
+        .textContent =
+        timeLeft;
+
+
+      /*
+        ONLY when timer reaches ZERO
+        do we check whether target was completed.
+      */
+
+      if(timeLeft === 0){
+
+        clearInterval(timerId);
+
+        setTimeout(() => {
+
+          if(!playing){
+            return;
+          }
+
+          if(
+            collected >=
+            targetStars
+          ){
+
+            finishLevel(
+              true,
+              false,
+              "time"
+            );
+
+          }else{
+
+            finishLevel(
+              false,
+              false,
+              "time"
+            );
+          }
+
+        },50);
+      }
+
+    },1000);
+
+
+  cancelAnimationFrame(animationId);
+
+  animationId =
+    requestAnimationFrame(gameLoop);
+}
+
+
+/* =========================================================
+   CREATE OBJECTS
+========================================================= */
+
+function createObjects(){
+
+  const count =
+    18 +
+    Math.min(currentLevel,12);
+
+  for(let i=0;i<count;i++){
+
+    const isBomb =
+      Math.random() <
+      Math.min(
+        .07 + currentLevel*.006,
+        .23
+      );
+
+    objects.push({
+
+      x:
+        Math.random() *
+        Math.max(20,W-25),
+
+      y:
+        -Math.random()*H,
+
+      size:
+        isBomb ? 25 : 22,
+
+      speed:
+        1.5 +
+        Math.random()*1.5 +
+        currentLevel*.035,
+
+      type:
+        isBomb ? "bomb" : "star",
+
+      rotation:
+        Math.random()*Math.PI*2
+    });
+  }
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
 
 function resizeCanvas(){
 
-  W = canvas.width =
-    window.innerWidth * devicePixelRatio;
+  const rect =
+    canvas.getBoundingClientRect();
 
-  H = canvas.height =
-    window.innerHeight * devicePixelRatio;
+  const dpr =
+    Math.min(
+      window.devicePixelRatio || 1,
+      2
+    );
 
-  canvas.style.width =
-    window.innerWidth + "px";
+  W = rect.width;
+  H = rect.height;
 
-  canvas.style.height =
-    window.innerHeight + "px";
+  canvas.width =
+    W*dpr;
+
+  canvas.height =
+    H*dpr;
 
   ctx.setTransform(
-    devicePixelRatio,
+    dpr,
     0,
     0,
-    devicePixelRatio,
+    dpr,
     0,
     0
   );
 
-  W = window.innerWidth;
-  H = window.innerHeight;
+  player.y =
+    H-65;
 
-  createBackground();
-}
-
-window.addEventListener("resize", resizeCanvas);
-
-/* ---------- BACKGROUND ---------- */
-
-function createBackground(){
-
-  starsBackground = [];
-
-  for(let i=0;i<120;i++){
-
-    starsBackground.push({
-      x:Math.random()*W,
-      y:Math.random()*H,
-      r:Math.random()*1.8+.3,
-      a:Math.random()*.8+.2
-    });
-
+  if(player.x >
+    W-player.width
+  ){
+    player.x =
+      W-player.width;
   }
 }
 
-function drawBackground(){
 
-  ctx.fillStyle="#040714";
-  ctx.fillRect(0,0,W,H);
+/* =========================================================
+   GAME LOOP
+========================================================= */
 
-  const gradient =
-    ctx.createRadialGradient(
-      W*.5,H*.35,20,
-      W*.5,H*.5,H
+function gameLoop(){
+
+  if(!playing){
+    return;
+  }
+
+  update();
+
+  draw();
+
+  if(playing){
+
+    animationId =
+      requestAnimationFrame(
+        gameLoop
+      );
+  }
+}
+
+
+/* =========================================================
+   UPDATE
+========================================================= */
+
+function update(){
+
+  if(!playing || paused){
+    return;
+  }
+
+
+  /* KEYBOARD */
+
+  if(keys.left){
+    player.x -= player.speed;
+  }
+
+  if(keys.right){
+    player.x += player.speed;
+  }
+
+
+  player.x =
+    Math.max(
+      0,
+      Math.min(
+        W-player.width,
+        player.x
+      )
     );
 
-  gradient.addColorStop(0,"#111b42");
-  gradient.addColorStop(1,"#03050d");
 
-  ctx.fillStyle=gradient;
-  ctx.fillRect(0,0,W,H);
+  /* OBJECTS */
 
-  for(const s of starsBackground){
+  for(const obj of objects){
 
-    ctx.globalAlpha=s.a;
+    obj.y += obj.speed;
 
-    ctx.fillStyle="#ffffff";
+    obj.rotation += .025;
+
+
+    /* COLLISION */
+
+    if(
+      obj.y + obj.size >
+      player.y &&
+
+      obj.y <
+      player.y + player.height &&
+
+      obj.x + obj.size >
+      player.x &&
+
+      obj.x <
+      player.x + player.width
+    ){
+
+      if(obj.type === "star"){
+
+        collected++;
+
+        levelScore +=
+          100 +
+          currentLevel*10;
+
+        obj.y = -60;
+
+        obj.x =
+          Math.random() *
+          Math.max(
+            10,
+            W-25
+          );
+
+        document.getElementById(
+          "hudStars"
+        ).textContent =
+          `${collected}/${targetStars}`;
+
+        document.getElementById(
+          "hudScore"
+        ).textContent =
+          levelScore;
+
+
+        /*
+          ==================================================
+          FIXED:
+          DO NOT finish the level here.
+          ==================================================
+
+          The old code had:
+
+          if(collected >= targetStars){
+              finishLevel(true);
+          }
+
+          That caused the level to complete before
+          the timer ended.
+
+          Now the player continues playing.
+        */
+
+      }else{
+
+        /*
+          Bomb still causes immediate failure,
+          exactly like the original game.
+        */
+
+        finishLevel(
+          false,
+          true,
+          "bomb"
+        );
+
+        return;
+      }
+    }
+
+
+    /* RESET FALLING OBJECT */
+
+    if(obj.y > H+60){
+
+      obj.y = -60;
+
+      obj.x =
+        Math.random() *
+        Math.max(
+          10,
+          W-25
+        );
+    }
+  }
+}
+
+
+/* =========================================================
+   DRAW
+========================================================= */
+
+function draw(){
+
+  /* BACKGROUND */
+
+  const gradient =
+    ctx.createLinearGradient(
+      0,0,0,H
+    );
+
+  gradient.addColorStop(
+    0,
+    "#070a1d"
+  );
+
+  gradient.addColorStop(
+    1,
+    "#151033"
+  );
+
+  ctx.fillStyle =
+    gradient;
+
+  ctx.fillRect(
+    0,0,W,H
+  );
+
+
+  /* BACKGROUND STARS */
+
+  for(let i=0;i<75;i++){
+
+    const x =
+      (i*83)%W;
+
+    const y =
+      (i*137)%H;
+
+    const s =
+      (i%3)+1;
+
+    ctx.fillStyle =
+      i%5===0
+      ? "rgba(255,216,77,.65)"
+      : "rgba(255,255,255,.28)";
 
     ctx.beginPath();
+
     ctx.arc(
-      s.x,
-      s.y,
-      s.r,
+      x,y,s,
       0,
       Math.PI*2
     );
@@ -591,153 +1631,89 @@ function drawBackground(){
     ctx.fill();
   }
 
-  ctx.globalAlpha=1;
+
+  /* OBJECTS */
+
+  for(const obj of objects){
+
+    if(obj.type === "star"){
+
+      drawStar(
+        obj.x,
+        obj.y,
+        obj.size,
+        obj.rotation
+      );
+
+    }else{
+
+      drawBomb(
+        obj.x,
+        obj.y,
+        obj.size
+      );
+    }
+  }
+
+
+  /* PLAYER */
+
+  drawShip(
+    player.x,
+    player.y,
+    player.width,
+    player.height
+  );
+
+
+  /* PAUSE */
+
+  if(paused){
+
+    ctx.fillStyle =
+      "rgba(0,0,0,.55)";
+
+    ctx.fillRect(
+      0,0,W,H
+    );
+
+    ctx.fillStyle =
+      "#fff";
+
+    ctx.font =
+      "bold 38px Arial";
+
+    ctx.textAlign =
+      "center";
+
+    ctx.fillText(
+      "PAUSED",
+      W/2,
+      H/2
+    );
+  }
 }
 
-/* ---------- PLAYER ---------- */
 
-const player = {
-  x:0,
-  y:0,
-  width:48,
-  height:58,
-  speed:7
-};
+/* =========================================================
+   STAR
+========================================================= */
 
-function resetPlayer(){
-
-  player.x =
-    W/2;
-
-  player.y =
-    H-125;
-}
-
-function drawPlayer(){
+function drawStar(
+  x,
+  y,
+  r,
+  rotation
+){
 
   ctx.save();
 
   ctx.translate(
-    player.x,
-    player.y
+    x+r/2,
+    y+r/2
   );
 
-  // glow
-  ctx.shadowBlur=25;
-  ctx.shadowColor="#54eaff";
-
-  // ship
-  ctx.fillStyle="#65efff";
-
-  ctx.beginPath();
-
-  ctx.moveTo(0,-30);
-  ctx.lineTo(25,25);
-  ctx.lineTo(0,16);
-  ctx.lineTo(-25,25);
-
-  ctx.closePath();
-
-  ctx.fill();
-
-  ctx.shadowBlur=0;
-
-  // cockpit
-  ctx.fillStyle="#ffffff";
-
-  ctx.beginPath();
-
-  ctx.arc(
-    0,
-    -8,
-    8,
-    0,
-    Math.PI*2
-  );
-
-  ctx.fill();
-
-  // engine
-  ctx.fillStyle="#9c5cff";
-
-  ctx.beginPath();
-
-  ctx.moveTo(-8,20);
-  ctx.lineTo(0,38);
-  ctx.lineTo(8,20);
-
-  ctx.closePath();
-
-  ctx.fill();
-
-  ctx.restore();
-}
-
-/* ---------- LEVEL DATA ---------- */
-
-function getLevelData(level){
-
-  return {
-
-    target:
-      4 + Math.floor(level * .65),
-
-    time:
-      Math.min(
-        70,
-        35 + Math.floor(level * 1.2)
-      ),
-
-    speed:
-      2.2 + level*.13,
-
-    bombChance:
-      Math.min(.25, .08 + level*.005)
-
-  };
-}
-
-/* ---------- OBJECTS ---------- */
-
-function spawnObject(){
-
-  const data =
-    getLevelData(currentLevel);
-
-  const isBomb =
-    Math.random() < data.bombChance;
-
-  objects.push({
-
-    x:Math.random()*(W-60)+30,
-
-    y:-40,
-
-    r:isBomb ? 18 : 15,
-
-    speed:
-      data.speed +
-      Math.random()*1.8,
-
-    type:
-      isBomb ? "bomb" : "star",
-
-    rotation:
-      Math.random()*Math.PI*2
-
-  });
-}
-
-function drawStar(x,y,r){
-
-  ctx.save();
-
-  ctx.translate(x,y);
-
-  ctx.shadowBlur=22;
-  ctx.shadowColor="#ffd84d";
-
-  ctx.fillStyle="#ffd84d";
+  ctx.rotate(rotation);
 
   ctx.beginPath();
 
@@ -748,7 +1724,9 @@ function drawStar(x,y,r){
       i*Math.PI/5;
 
     const radius =
-      i%2===0 ? r : r*.42;
+      i%2===0
+      ? r/2
+      : r/4.5;
 
     const px =
       Math.cos(angle)*radius;
@@ -756,767 +1734,753 @@ function drawStar(x,y,r){
     const py =
       Math.sin(angle)*radius;
 
-    if(i===0)
+    if(i===0){
       ctx.moveTo(px,py);
-    else
+    }else{
       ctx.lineTo(px,py);
+    }
   }
 
   ctx.closePath();
+
+  ctx.shadowBlur =
+    20;
+
+  ctx.shadowColor =
+    "#ffd84d";
+
+  ctx.fillStyle =
+    "#ffd84d";
+
   ctx.fill();
+
+  ctx.shadowBlur =
+    0;
 
   ctx.restore();
 }
 
-function drawBomb(x,y,r){
+
+/* =========================================================
+   BOMB
+========================================================= */
+
+function drawBomb(
+  x,
+  y,
+  r
+){
 
   ctx.save();
 
-  ctx.translate(x,y);
+  ctx.translate(
+    x+r/2,
+    y+r/2
+  );
 
-  ctx.shadowBlur=18;
-  ctx.shadowColor="#ff3355";
+  ctx.fillStyle =
+    "#181a29";
 
-  ctx.fillStyle="#242838";
+  ctx.shadowBlur =
+    12;
+
+  ctx.shadowColor =
+    "rgba(255,80,80,.5)";
 
   ctx.beginPath();
+
   ctx.arc(
-    0,0,r,
-    0,Math.PI*2
+    0,
+    0,
+    r/2,
+    0,
+    Math.PI*2
   );
 
   ctx.fill();
 
-  ctx.shadowBlur=0;
+  ctx.shadowBlur =
+    0;
 
-  ctx.strokeStyle="#ff4864";
-  ctx.lineWidth=3;
+  ctx.strokeStyle =
+    "#ff5b62";
+
+  ctx.lineWidth =
+    2;
 
   ctx.stroke();
 
-  ctx.strokeStyle="#ffcc55";
-  ctx.lineWidth=3;
+  ctx.fillStyle =
+    "#ff5b62";
 
-  ctx.beginPath();
+  ctx.font =
+    "bold 15px Arial";
 
-  ctx.moveTo(5,-r+2);
-  ctx.quadraticCurveTo(
-    12,-r-10,
-    20,-r-4
+  ctx.textAlign =
+    "center";
+
+  ctx.fillText(
+    "!",
+    0,
+    6
   );
-
-  ctx.stroke();
 
   ctx.restore();
 }
 
-/* ---------- PARTICLES ---------- */
 
-function burst(x,y,type){
+/* =========================================================
+   PLAYER SHIP
+========================================================= */
 
-  for(let i=0;i<18;i++){
+function drawShip(
+  x,
+  y,
+  w,
+  h
+){
 
-    particles.push({
+  ctx.save();
 
-      x,
-      y,
+  ctx.translate(
+    x+w/2,
+    y
+  );
 
-      vx:
-        (Math.random()-.5)*6,
+  ctx.shadowBlur =
+    22;
 
-      vy:
-        (Math.random()-.5)*6,
+  ctx.shadowColor =
+    "#64d9ff";
 
-      life:1,
+  ctx.fillStyle =
+    "#4bcfff";
 
-      type
+  ctx.beginPath();
 
-    });
+  ctx.moveTo(
+    0,
+    -25
+  );
 
+  ctx.lineTo(
+    w/2,
+    10
+  );
+
+  ctx.lineTo(
+    w/3,
+    20
+  );
+
+  ctx.lineTo(
+    -w/3,
+    20
+  );
+
+  ctx.lineTo(
+    -w/2,
+    10
+  );
+
+  ctx.closePath();
+
+  ctx.fill();
+
+  ctx.shadowBlur =
+    0;
+
+  /* cockpit */
+
+  ctx.fillStyle =
+    "#171b45";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    -4,
+    9,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* engines */
+
+  ctx.fillStyle =
+    "#ffb52e";
+
+  ctx.beginPath();
+
+  ctx.moveTo(-15,18);
+  ctx.lineTo(-5,32);
+  ctx.lineTo(0,18);
+
+  ctx.fill();
+
+  ctx.beginPath();
+
+  ctx.moveTo(15,18);
+  ctx.lineTo(5,32);
+  ctx.lineTo(0,18);
+
+  ctx.fill();
+
+  ctx.restore();
+}
+
+
+/* =========================================================
+   FINISH LEVEL
+========================================================= */
+
+function finishLevel(
+  success,
+  bomb=false,
+  reason=""
+){
+
+  if(!playing){
+    return;
   }
-}
 
-function updateParticles(){
-
-  for(let i=particles.length-1;i>=0;i--){
-
-    const p=particles[i];
-
-    p.x+=p.vx;
-    p.y+=p.vy;
-    p.life-=.035;
-
-    if(p.life<=0){
-      particles.splice(i,1);
-      continue;
-    }
-
-    ctx.globalAlpha=p.life;
-
-    ctx.fillStyle =
-      p.type==="star"
-      ? "#ffd84d"
-      : "#ff4260";
-
-    ctx.beginPath();
-
-    ctx.arc(
-      p.x,
-      p.y,
-      3,
-      0,
-      Math.PI*2
-    );
-
-    ctx.fill();
-  }
-
-  ctx.globalAlpha=1;
-}
-
-/* ---------- HUD ---------- */
-
-function updateHUD(){
-
-  document.getElementById("hudPlayer")
-    .textContent=playerName;
-
-  document.getElementById("hudLevel")
-    .textContent=currentLevel;
-
-  document.getElementById("hudStars")
-    .textContent=
-    collected+"/"+targetStars;
-
-  document.getElementById("hudTime")
-    .textContent=timeLeft;
-
-  document.getElementById("targetText")
-    .textContent=
-    targetStars+" Stars";
-}
-
-/* ---------- COLLISION ---------- */
-
-function collision(a,b){
-
-  return Math.hypot(
-    a.x-b.x,
-    a.y-b.y
-  ) < b.r + 27;
-}
-
-/* ---------- START LEVEL ---------- */
-
-function startLevel(){
-
-  const data =
-    getLevelData(currentLevel);
-
-  targetStars=data.target;
-  timeLeft=data.time;
-
-  collected=0;
-
-  objects=[];
-  particles=[];
-
-  resetPlayer();
-
-  updateHUD();
+  playing = false;
 
   clearInterval(timerId);
 
-  /*
-    IMPORTANT:
-    Level NEVER finishes just because targetStars
-    has been collected.
+  cancelAnimationFrame(
+    animationId
+  );
 
-    Timer is the main success check.
-  */
 
-  timerId=setInterval(()=>{
-
-    if(!playing || paused)
-      return;
-
-    timeLeft--;
-
-    updateHUD();
-
-    if(timeLeft<=0){
-
-      clearInterval(timerId);
-
-      /*
-        ONLY HERE:
-        We decide whether the level is complete.
-      */
-
-      if(collected>=targetStars){
-
-        finishLevel(true);
-
-      }else{
-
-        finishLevel(false);
-
-      }
-
-    }
-
-  },1000);
-}
-
-/* ---------- GAME LOOP ---------- */
-
-let lastSpawn=0;
-
-function gameLoop(timestamp){
-
-  if(!playing)
-    return;
-
-  drawBackground();
-
-  if(!paused){
-
-    // movement
-
-    if(leftPressed)
-      player.x-=player.speed;
-
-    if(rightPressed)
-      player.x+=player.speed;
-
-    // keyboard
-
-    if(keys["ArrowLeft"] || keys["a"])
-      player.x-=player.speed;
-
-    if(keys["ArrowRight"] || keys["d"])
-      player.x+=player.speed;
-
-    player.x=
-      Math.max(
-        30,
-        Math.min(W-30,player.x)
-      );
-
-    // spawn
-
-    if(timestamp-lastSpawn>520){
-
-      spawnObject();
-
-      lastSpawn=timestamp;
-
-    }
-
-    // objects
-
-    for(let i=objects.length-1;i>=0;i--){
-
-      const obj=objects[i];
-
-      obj.y+=obj.speed;
-      obj.rotation+=.04;
-
-      if(obj.type==="star")
-        drawStar(obj.x,obj.y,obj.r);
-      else
-        drawBomb(obj.x,obj.y,obj.r);
-
-      // collision
-
-      if(collision(player,obj)){
-
-        if(obj.type==="star"){
-
-          collected++;
-          score+=10;
-          totalStars++;
-
-          burst(
-            obj.x,
-            obj.y,
-            "star"
-          );
-
-          objects.splice(i,1);
-
-          updateHUD();
-
-          /*
-            VERY IMPORTANT:
-            NO finishLevel() HERE.
-
-            Even if:
-            collected >= targetStars
-
-            the level CONTINUES until
-            timer reaches 0.
-          */
-
-        }else{
-
-          burst(
-            obj.x,
-            obj.y,
-            "bomb"
-          );
-
-          objects.splice(i,1);
-
-          // Bomb = immediate failure
-          finishLevel(false,"bomb");
-
-          return;
-        }
-
-      }
-
-      if(obj.y>H+60){
-
-        objects.splice(i,1);
-
-      }
-
-    }
-
-  }
-
-  drawPlayer();
-  updateParticles();
-
-  animationId=
-    requestAnimationFrame(gameLoop);
-}
-
-/* ---------- FINISH ---------- */
-
-function finishLevel(success,reason="time"){
-
-  if(!playing)
-    return;
-
-  playing=false;
-
-  clearInterval(timerId);
-
-  save.score=score;
-
-  if(score>bestScore){
-
-    bestScore=score;
-    save.bestScore=bestScore;
-
-  }
+  /* SUCCESS */
 
   if(success){
 
-    save.levelStars[currentLevel]=
-      Math.max(
-        save.levelStars[currentLevel]||0,
-        collected
-      );
-
-    if(currentLevel>=save.unlockedLevel){
-
-      save.unlockedLevel=
-        Math.min(30,currentLevel+1);
-
-    }
+    let earnedStars = 1;
 
     /*
-      Advance saved progress immediately.
-      So reopening the game starts from the next level.
+      More remaining time = more stars.
+      With the new timer logic, this is evaluated
+      when the timer has reached 0, so normally the
+      player receives the appropriate completion result.
     */
 
-    if(currentLevel<30){
+    if(timeLeft >= 18){
+      earnedStars = 2;
+    }
 
-      save.currentLevel=
+    if(timeLeft >= 28){
+      earnedStars = 3;
+    }
+
+
+    const oldStars =
+      save.levelStars[currentLevel] || 0;
+
+
+    if(
+      earnedStars >
+      oldStars
+    ){
+
+      save.levelStars[
+        currentLevel
+      ] =
+        earnedStars;
+
+      save.totalStars +=
+        earnedStars -
+        oldStars;
+    }
+
+
+    save.score +=
+      levelScore;
+
+
+    save.bestScore =
+      Math.max(
+        save.bestScore,
+        save.score
+      );
+
+
+    /*
+      Unlock next level.
+    */
+
+    if(
+      currentLevel >=
+      save.unlockedLevel
+    ){
+
+      save.unlockedLevel =
+        Math.min(
+          TOTAL_LEVELS,
+          currentLevel+1
+        );
+    }
+
+
+    /*
+      Continue from next level.
+    */
+
+    if(
+      currentLevel <
+      TOTAL_LEVELS
+    ){
+
+      save.currentLevel =
         currentLevel+1;
 
     }else{
 
-      save.currentLevel=30;
-
+      save.currentLevel =
+        TOTAL_LEVELS;
     }
 
-  }else{
-
-    /*
-      Failure:
-      Keep the same level saved.
-    */
-
-    save.currentLevel=currentLevel;
-
-  }
-
-  saveGame();
-
-  const modal=
-    document.getElementById("resultModal");
-
-  const title=
-    document.getElementById("resultTitle");
-
-  const text=
-    document.getElementById("resultText");
-
-  const next=
-    document.getElementById("nextBtn");
-
-  const retry=
-    document.getElementById("retryBtn");
-
-  modal.classList.add("show");
-
-  if(success){
-
-    title.textContent=
-      currentLevel>=30
-      ? "🏆 ALL LEVELS COMPLETE!"
-      : "⭐ LEVEL COMPLETE!";
-
-    text.innerHTML=
-      `Great job, <b>${escapeHTML(playerName)}</b>!<br>
-       You collected <b>${collected}/${targetStars}</b> stars.<br>
-       Score: <b>${score}</b>`;
-
-    retry.classList.add("hidden");
-
-    if(currentLevel>=30){
-
-      next.classList.add("hidden");
-
-    }else{
-
-      next.classList.remove("hidden");
-
-    }
-
-  }else{
-
-    title.textContent=
-      reason==="bomb"
-      ? "💥 BOOM!"
-      : "⏰ TIME UP!";
-
-    text.innerHTML=
-      `<b>${escapeHTML(playerName)}</b>, you collected
-       <b>${collected}/${targetStars}</b> stars.<br>
-       You need <b>${targetStars}</b> stars to complete this level.`;
-
-    next.classList.add("hidden");
-    retry.classList.remove("hidden");
-
-  }
-
-}
-
-/* ---------- NEXT ---------- */
-
-function nextLevel(){
-
-  if(currentLevel>=30)
-    return;
-
-  currentLevel++;
-
-  save.currentLevel=
-    currentLevel;
-
-  saveGame();
-
-  document.getElementById("resultModal")
-    .classList.remove("show");
-
-  playing=true;
-
-  startLevel();
-
-  cancelAnimationFrame(animationId);
-
-  animationId=
-    requestAnimationFrame(gameLoop);
-}
-
-/* ---------- RETRY ---------- */
-
-function retryLevel(){
-
-  document.getElementById("resultModal")
-    .classList.remove("show");
-
-  playing=true;
-
-  startLevel();
-
-  cancelAnimationFrame(animationId);
-
-  animationId=
-    requestAnimationFrame(gameLoop);
-}
-
-/* ---------- START GAME ---------- */
-
-function startGame(){
-
-  const input=
-    document.getElementById("playerName");
-
-  const name=
-    input.value.trim();
-
-  if(!name){
-
-    input.focus();
-
-    alert("Please enter your player name.");
-
-    return;
-
-  }
-
-  playerName=name;
-
-  localStorage.setItem(
-    NAME_KEY,
-    playerName
-  );
-
-  currentLevel=
-    Math.max(
-      1,
-      Math.min(
-        30,
-        save.currentLevel||1
-      )
-    );
-
-  document.getElementById("homeScreen")
-    .classList.remove("active");
-
-  document.getElementById("gameScreen")
-    .classList.add("active");
-
-  resizeCanvas();
-
-  playing=true;
-  paused=false;
-
-  startLevel();
-
-  cancelAnimationFrame(animationId);
-
-  animationId=
-    requestAnimationFrame(gameLoop);
-}
-
-/* ---------- HOME ---------- */
-
-function goHome(){
-
-  /*
-    Save the exact current level before leaving.
-    This makes sure reopening the game continues
-    from the same level.
-  */
-
-  if(playing){
-
-    save.currentLevel=currentLevel;
-
-    save.score=score;
 
     saveGame();
 
+    renderLevels();
+
+    showResult(
+      true,
+      earnedStars
+    );
+
+    return;
   }
 
-  playing=false;
+
+  /* FAILED */
+
+  showResult(
+    false,
+    0,
+    bomb ? "bomb" : "time"
+  );
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+function showResult(
+  success,
+  stars,
+  reason
+){
+
+  const modal =
+    document.getElementById(
+      "resultModal"
+    );
+
+  const title =
+    document.getElementById(
+      "resultTitle"
+    );
+
+  const message =
+    document.getElementById(
+      "resultMessage"
+    );
+
+  const starsBox =
+    document.getElementById(
+      "resultStars"
+    );
+
+  const next =
+    document.getElementById(
+      "nextButton"
+    );
+
+
+  if(success){
+
+    title.textContent =
+      "🎉 LEVEL COMPLETE!";
+
+    message.textContent =
+      `${playerName}, amazing! You collected ${collected} stars and earned ${levelScore} points.`;
+
+    starsBox.textContent =
+      "★".repeat(stars) +
+      "☆".repeat(3-stars);
+
+    if(
+      currentLevel >=
+      TOTAL_LEVELS
+    ){
+
+      next.style.display =
+        "none";
+
+    }else{
+
+      next.style.display =
+        "inline-block";
+
+      next.textContent =
+        "NEXT LEVEL →";
+
+      next.onclick =
+        nextLevel;
+    }
+
+  }else{
+
+    if(reason === "bomb"){
+
+      title.textContent =
+        "💥 BOOM!";
+
+      message.textContent =
+        `${playerName}, you hit a bomb. Try again!`;
+
+    }else{
+
+      title.textContent =
+        "⏰ TIME UP!";
+
+      message.textContent =
+        `${playerName}, the timer reached 0. You collected ${collected}/${targetStars} stars. Try again!`;
+    }
+
+    starsBox.textContent =
+      "☆☆☆";
+
+    next.style.display =
+      "none";
+  }
+
+
+  modal.style.display =
+    "flex";
+}
+
+
+/* =========================================================
+   NEXT LEVEL
+========================================================= */
+
+function nextLevel(){
+
+  closeModal();
+
+  if(
+    currentLevel <
+    TOTAL_LEVELS
+  ){
+
+    startLevel(
+      currentLevel+1
+    );
+  }
+}
+
+
+/* =========================================================
+   RETRY
+========================================================= */
+
+function retryCurrentLevel(){
+
+  closeModal();
+
+  startLevel(
+    currentLevel
+  );
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal(){
+
+  document.getElementById(
+    "resultModal"
+  ).style.display =
+    "none";
+}
+
+
+/* =========================================================
+   PAUSE
+========================================================= */
+
+function pauseGame(){
+
+  if(!playing){
+    return;
+  }
+
+  paused =
+    !paused;
+
+  document.getElementById(
+    "pauseBtn"
+  ).textContent =
+    paused
+    ? "▶ RESUME"
+    : "Ⅱ PAUSE";
+}
+
+
+/* =========================================================
+   STOP
+========================================================= */
+
+function stopGame(){
+
+  playing = false;
+  paused = false;
 
   clearInterval(timerId);
 
-  cancelAnimationFrame(animationId);
+  cancelAnimationFrame(
+    animationId
+  );
 
-  document.getElementById("resultModal")
-    .classList.remove("show");
-
-  document.getElementById("gameScreen")
-    .classList.remove("active");
-
-  document.getElementById("homeScreen")
-    .classList.add("active");
+  keys.left = false;
+  keys.right = false;
 }
 
-/* ---------- KEYBOARD ---------- */
 
-const keys={};
-
-window.addEventListener("keydown",e=>{
-
-  keys[e.key]=true;
-
-  if([
-    "ArrowLeft",
-    "ArrowRight",
-    " "
-  ].includes(e.key)){
-
-    e.preventDefault();
-
-  }
-
-});
-
-window.addEventListener("keyup",e=>{
-
-  keys[e.key]=false;
-
-});
-
-/* ---------- MOBILE CONTROLS ---------- */
-
-function setupButton(id,direction){
-
-  const btn=
-    document.getElementById(id);
-
-  const down=e=>{
-
-    e.preventDefault();
-
-    if(direction==="left")
-      leftPressed=true;
-    else
-      rightPressed=true;
-
-  };
-
-  const up=e=>{
-
-    e.preventDefault();
-
-    if(direction==="left")
-      leftPressed=false;
-    else
-      rightPressed=false;
-
-  };
-
-  btn.addEventListener(
-    "pointerdown",
-    down
-  );
-
-  btn.addEventListener(
-    "pointerup",
-    up
-  );
-
-  btn.addEventListener(
-    "pointercancel",
-    up
-  );
-
-  btn.addEventListener(
-    "pointerleave",
-    up
-  );
-
-}
-
-setupButton("leftBtn","left");
-setupButton("rightBtn","right");
-
-/* ---------- DRAG CONTROL ---------- */
-
-let dragging=false;
-
-canvas.addEventListener(
-  "pointerdown",
-  e=>{
-
-    dragging=true;
-
-    movePlayerToPointer(e);
-
-  }
-);
-
-canvas.addEventListener(
-  "pointermove",
-  e=>{
-
-    if(dragging)
-      movePlayerToPointer(e);
-
-  }
-);
+/* =========================================================
+   KEYBOARD
+========================================================= */
 
 window.addEventListener(
-  "pointerup",
-  ()=>{
-    dragging=false;
-  }
-);
+  "keydown",
+  function(e){
 
-function movePlayerToPointer(e){
+    if(
+      e.key === "ArrowLeft" ||
+      e.key.toLowerCase() === "a"
+    ){
 
-  if(!playing)
-    return;
+      keys.left = true;
+      e.preventDefault();
+    }
 
-  player.x=
-    Math.max(
-      30,
-      Math.min(
-        W-30,
-        e.clientX
-      )
-    );
+    if(
+      e.key === "ArrowRight" ||
+      e.key.toLowerCase() === "d"
+    ){
 
-}
+      keys.right = true;
+      e.preventDefault();
+    }
 
-/* ---------- SAFE HTML ---------- */
+    if(e.key === " "){
 
-function escapeHTML(str){
-
-  return String(str)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-/* ---------- SAVE ON EXIT ---------- */
-
-window.addEventListener(
-  "beforeunload",
-  ()=>{
-
-    if(playing){
-
-      save.currentLevel=
-        currentLevel;
-
-      save.score=score;
-
-      saveGame();
-
+      pauseGame();
+      e.preventDefault();
     }
 
   }
 );
 
-/* ---------- INIT ---------- */
 
-loadGame();
-resizeCanvas();
+window.addEventListener(
+  "keyup",
+  function(e){
+
+    if(
+      e.key === "ArrowLeft" ||
+      e.key.toLowerCase() === "a"
+    ){
+
+      keys.left = false;
+    }
+
+    if(
+      e.key === "ArrowRight" ||
+      e.key.toLowerCase() === "d"
+    ){
+
+      keys.right = false;
+    }
+
+  }
+);
+
+
+/* =========================================================
+   BUTTON MOVEMENT
+========================================================= */
+
+function moveLeft(){
+
+  if(!playing || paused){
+    return;
+  }
+
+  player.x -= 65;
+
+  player.x =
+    Math.max(
+      0,
+      player.x
+    );
+}
+
+
+function moveRight(){
+
+  if(!playing || paused){
+    return;
+  }
+
+  player.x += 65;
+
+  player.x =
+    Math.min(
+      W-player.width,
+      player.x
+    );
+}
+
+
+/* =========================================================
+   TOUCH / DRAG
+========================================================= */
+
+let dragging = false;
+
+
+canvas.addEventListener(
+  "pointerdown",
+  function(e){
+
+    if(!playing || paused){
+      return;
+    }
+
+    dragging = true;
+
+    movePlayerToPointer(e);
+  }
+);
+
+
+canvas.addEventListener(
+  "pointermove",
+  function(e){
+
+    if(
+      dragging &&
+      playing &&
+      !paused
+    ){
+
+      movePlayerToPointer(e);
+    }
+
+  }
+);
+
+
+window.addEventListener(
+  "pointerup",
+  function(){
+
+    dragging = false;
+
+  }
+);
+
+
+function movePlayerToPointer(e){
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+  const x =
+    e.clientX -
+    rect.left;
+
+  player.x =
+    x -
+    player.width/2;
+
+  player.x =
+    Math.max(
+      0,
+      Math.min(
+        W-player.width,
+        player.x
+      )
+    );
+}
+
+
+canvas.addEventListener(
+  "touchmove",
+  function(e){
+
+    e.preventDefault();
+
+  },
+  {passive:false}
+);
+
+
+/* =========================================================
+   AUTO SAVE
+========================================================= */
+
+window.addEventListener(
+  "beforeunload",
+  function(){
+
+    save.currentLevel =
+      currentLevel;
+
+    localStorage.setItem(
+      "starRushSave",
+      JSON.stringify(save)
+    );
+
+    if(playerName){
+
+      localStorage.setItem(
+        "starRushPlayerName",
+        playerName
+      );
+    }
+  }
+);
+
+
+/* =========================================================
+   WINDOW RESIZE
+========================================================= */
+
+window.addEventListener(
+  "resize",
+  function(){
+
+    if(
+      gameScreen.style.display ===
+      "block"
+    ){
+
+      resizeCanvas();
+    }
+  }
+);
 
 </script>
 
